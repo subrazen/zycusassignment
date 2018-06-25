@@ -12,6 +12,16 @@
             <stringProp name="Argument.value">0</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="Path" elementType="Argument">
+            <stringProp name="Argument.name">Path</stringProp>
+            <stringProp name="Argument.value">C://ZycusAssignment//</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="Server" elementType="Argument">
+            <stringProp name="Argument.name">Server</stringProp>
+            <stringProp name="Argument.value">127.0.0.1</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
         </collectionProp>
       </elementProp>
       <stringProp name="TestPlan.user_define_classpath">C:\ZycusAssignment\poi-bin-3.17-20170915\poi-3.17\poi-3.17.jar,C:\ZycusAssignment\poi-3.17\lib\commons-codec-1.10.jar,C:\ZycusAssignment\poi-3.17\lib\commons-collections4-4.1.jar,C:\ZycusAssignment\poi-3.17\lib\commons-logging-1.2.jar,C:\ZycusAssignment\poi-3.17\lib\junit-4.12.jar,C:\ZycusAssignment\poi-3.17\lib\log4j-1.2.17.jar,C:\ZycusAssignment\poi-3.17\ooxml-lib\curvesapi-1.04.jar,C:\ZycusAssignment\poi-3.17\ooxml-lib\xmlbeans-2.6.0.jar,C:\ZycusAssignment\poi-3.17\poi-examples-3.17.jar,C:\ZycusAssignment\poi-3.17\poi-excelant-3.17.jar,C:\ZycusAssignment\poi-3.17\poi-ooxml-3.17.jar,C:\ZycusAssignment\poi-3.17\poi-ooxml-schemas-3.17.jar,C:\ZycusAssignment\poi-3.17\poi-scratchpad-3.17.jar</stringProp>
@@ -46,7 +56,7 @@
               </elementProp>
             </collectionProp>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
+          <stringProp name="HTTPSampler.domain">${Server}</stringProp>
           <stringProp name="HTTPSampler.port">4000</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
@@ -75,8 +85,10 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+log.info (&quot;CURRENT DIRECT...................&quot;+currentDir);
+
 String fileName=&quot;TenantCustomerUpload.xlsx&quot;;
-File file =    new File(&quot;C://ZycusAssignment//TenantCustomerUpload.xlsx&quot;);
+File file =    new File(&quot;${Path}TenantCustomerUpload.xlsx&quot;);
 FileInputStream inputStream = new FileInputStream(file);
 
 Workbook Workbook = null;
@@ -141,7 +153,7 @@ if(fileExtensionName.equals(&quot;.xlsx&quot;)){
               </elementProp>
             </collectionProp>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
+          <stringProp name="HTTPSampler.domain">${Server}</stringProp>
           <stringProp name="HTTPSampler.port">4000</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
@@ -177,7 +189,7 @@ if(fileExtensionName.equals(&quot;.xlsx&quot;)){
               </elementProp>
             </collectionProp>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
+          <stringProp name="HTTPSampler.domain">${Server}</stringProp>
           <stringProp name="HTTPSampler.port">4000</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
@@ -208,7 +220,7 @@ if(fileExtensionName.equals(&quot;.xlsx&quot;)){
               </elementProp>
             </collectionProp>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
+          <stringProp name="HTTPSampler.domain">${Server}</stringProp>
           <stringProp name="HTTPSampler.port">4000</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
@@ -281,7 +293,7 @@ if(fileExtensionName.equals(&quot;.xlsx&quot;)){
                 </elementProp>
               </collectionProp>
             </elementProp>
-            <stringProp name="HTTPSampler.domain">localhost</stringProp>
+            <stringProp name="HTTPSampler.domain">${Server}</stringProp>
             <stringProp name="HTTPSampler.port">3000</stringProp>
             <stringProp name="HTTPSampler.protocol">http</stringProp>
             <stringProp name="HTTPSampler.contentEncoding"></stringProp>
@@ -313,7 +325,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 String fileName=&quot;TenantCustomerUpload.xlsx&quot;;
-File file =    new File(&quot;C://ZycusAssignment//TenantCustomerUpload.xlsx&quot;);
+File file =    new File(&quot;${Path}TenantCustomerUpload.xlsx&quot;);
 FileInputStream inputStream = new FileInputStream(file);
 
 vars.put(&quot;myid&quot;,UUID.randomUUID().toString());
@@ -442,7 +454,7 @@ import java.io.IOException;
 
 
     def jsonSlurper = new JsonSlurper();
-    File file =    new File(&quot;C://ZycusAssignment//db-tenantconfig&quot;+vars.get(&quot;tenantid&quot;)+&quot;.json&quot;);
+    File file =    new File(&quot;${Path}db-tenantconfig&quot;+vars.get(&quot;tenantid&quot;)+&quot;.json&quot;);
 FileInputStream inputStream = new FileInputStream(file);
 
 
@@ -494,7 +506,7 @@ AssertionResult.setFailure(true);
               </elementProp>
             </collectionProp>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
+          <stringProp name="HTTPSampler.domain">${Server}</stringProp>
           <stringProp name="HTTPSampler.port">3000</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
@@ -526,7 +538,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 String fileName=&quot;TenantCustomerUpload.xlsx&quot;;
-File file =    new File(&quot;C://ZycusAssignment//TenantCustomerUploadPerformance.xlsx&quot;);
+File file =    new File(&quot;${Path}TenantCustomerUploadPerformance.xlsx&quot;);
 FileInputStream inputStream = new FileInputStream(file);
 
 vars.put(&quot;myid&quot;,UUID.randomUUID().toString());
@@ -656,7 +668,7 @@ import java.io.IOException;
 
 
     def jsonSlurper = new JsonSlurper();
-    File file =    new File(&quot;C://ZycusAssignment//db-tenantconfig&quot;+vars.get(&quot;tenantid&quot;)+&quot;.json&quot;);
+    File file =    new File(&quot;${Path}db-tenantconfig&quot;+vars.get(&quot;tenantid&quot;)+&quot;.json&quot;);
 FileInputStream inputStream = new FileInputStream(file);
 
 
@@ -692,7 +704,7 @@ AssertionResult.setFailure(true);
               </elementProp>
             </collectionProp>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
+          <stringProp name="HTTPSampler.domain">${Server}</stringProp>
           <stringProp name="HTTPSampler.port">3000</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
