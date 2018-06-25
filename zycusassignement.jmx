@@ -1,0 +1,1023 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="4.0" jmeter="4.0 r1823414">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
+      <stringProp name="TestPlan.comments"></stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">true</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="counter_value" elementType="Argument">
+            <stringProp name="Argument.name">counter_value</stringProp>
+            <stringProp name="Argument.value">0</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath">C:\ZycusAssignment\poi-bin-3.17-20170915\poi-3.17\poi-3.17.jar,C:\ZycusAssignment\poi-3.17\lib\commons-codec-1.10.jar,C:\ZycusAssignment\poi-3.17\lib\commons-collections4-4.1.jar,C:\ZycusAssignment\poi-3.17\lib\commons-logging-1.2.jar,C:\ZycusAssignment\poi-3.17\lib\junit-4.12.jar,C:\ZycusAssignment\poi-3.17\lib\log4j-1.2.17.jar,C:\ZycusAssignment\poi-3.17\ooxml-lib\curvesapi-1.04.jar,C:\ZycusAssignment\poi-3.17\ooxml-lib\xmlbeans-2.6.0.jar,C:\ZycusAssignment\poi-3.17\poi-examples-3.17.jar,C:\ZycusAssignment\poi-3.17\poi-excelant-3.17.jar,C:\ZycusAssignment\poi-3.17\poi-ooxml-3.17.jar,C:\ZycusAssignment\poi-3.17\poi-ooxml-schemas-3.17.jar,C:\ZycusAssignment\poi-3.17\poi-scratchpad-3.17.jar</stringProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="CustomerUpload Automation Testing - FileUpload" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Verify the Tenant customers file upload successfully" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+	&quot;id&quot;:&quot;${Filecounter}&quot;,&#xd;
+      &quot;tenantid&quot;: &quot;T0007&quot;,&#xd;
+      &quot;Filename&quot;: &quot;T0001_UploadFile1.xlsx&quot;,&#xd;
+      &quot;FileDate&quot;: &quot;7/20/2018&quot;&#xd;
+     }</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">localhost</stringProp>
+          <stringProp name="HTTPSampler.port">4000</stringProp>
+          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/uploadfile</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223 PostProcessor" enabled="true">
+            <stringProp name="cacheKey">true</stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="script">import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+String fileName=&quot;TenantCustomerUpload.xlsx&quot;;
+File file =    new File(&quot;C://ZycusAssignment//TenantCustomerUpload.xlsx&quot;);
+FileInputStream inputStream = new FileInputStream(file);
+
+Workbook Workbook = null;
+String fileExtensionName = fileName.substring(fileName.indexOf(&quot;.&quot;));
+
+if(fileExtensionName.equals(&quot;.xlsx&quot;)){
+    Workbook = new XSSFWorkbook(inputStream);
+
+    }
+
+    //Check condition if the file is xls file
+
+    else if(fileExtensionName.equals(&quot;.xls&quot;)){
+
+        //If it is xls file then create object of XSSFWorkbook class
+
+        Workbook = new HSSFWorkbook(inputStream);
+
+    }
+
+    //Read sheet inside the workbook by its name
+
+    String sheetName=&quot;customers&quot;;
+
+    Sheet Sheet = Workbook.getSheet(sheetName);
+
+    //Find number of rows in excel file
+
+    int rowCount = Sheet.getLastRowNum()-Sheet.getFirstRowNum();
+
+    vars.put(&quot;rowcount&quot;,rowCount.toString());
+
+   
+    props.put(&quot;Prowcount&quot;,vars.get(&quot;rowcount&quot;));</stringProp>
+            <stringProp name="scriptLanguage">groovy</stringProp>
+          </JSR223PostProcessor>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response from server should be 200 - File created successfully" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49587">201</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message">Issue when upload the file</stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">1</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Verify Uploaded Tenant customers file Extension should be XLSX" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+	&quot;id&quot;:&quot;${Filecounter}1&quot;,&#xd;
+      &quot;tenantid&quot;: &quot;T0007&quot;,&#xd;
+      &quot;Filename&quot;: &quot;T0001_UploadFile1.xlsx&quot;,&#xd;
+      &quot;FileDate&quot;: &quot;7/20/2018&quot;&#xd;
+     }</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">localhost</stringProp>
+          <stringProp name="HTTPSampler.port">4000</stringProp>
+          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/uploadfile</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPathAssertion guiclass="JSONPathAssertionGui" testclass="JSONPathAssertion" testname="JSON Assertion - FileExtension" enabled="true">
+            <stringProp name="JSON_PATH">$.Filename</stringProp>
+            <stringProp name="EXPECTED_VALUE">T0001_UploadFile1.xlsx</stringProp>
+            <boolProp name="JSONVALIDATION">true</boolProp>
+            <boolProp name="EXPECT_NULL">false</boolProp>
+            <boolProp name="INVERT">false</boolProp>
+            <boolProp name="ISREGEX">false</boolProp>
+          </JSONPathAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get the details of the upload file for Tenant" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value"></stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">localhost</stringProp>
+          <stringProp name="HTTPSampler.port">4000</stringProp>
+          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/uploadfile</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Verify Uploaded Tenant customers file when different file extension" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+	&quot;id&quot;:&quot;${Filecounter}1&quot;,&#xd;
+      &quot;tenantid&quot;: &quot;T0007&quot;,&#xd;
+      &quot;Filename&quot;: &quot;T0001_UploadFile1.csv&quot;,&#xd;
+      &quot;FileDate&quot;: &quot;7/20/2018&quot;&#xd;
+     }</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">localhost</stringProp>
+          <stringProp name="HTTPSampler.port">4000</stringProp>
+          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/uploadfile</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPathAssertion guiclass="JSONPathAssertionGui" testclass="JSONPathAssertion" testname="JSON Assertion - FileExtension" enabled="true">
+            <stringProp name="JSON_PATH">$.Filename</stringProp>
+            <stringProp name="EXPECTED_VALUE">T0001_UploadFile1.xlsx</stringProp>
+            <boolProp name="JSONVALIDATION">true</boolProp>
+            <boolProp name="EXPECT_NULL">false</boolProp>
+            <boolProp name="INVERT">true</boolProp>
+            <boolProp name="ISREGEX">false</boolProp>
+          </JSONPathAssertion>
+          <hashTree/>
+        </hashTree>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="CustomerUpload Automation Testing - LoadCustomers " enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">0</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="BeanShell Sampler - Fetch the number of customers in the file." enabled="true">
+          <stringProp name="BeanShellSampler.query">vars.put(&quot;rowcount&quot;,props.getProperty(&quot;Prowcount&quot;));
+</stringProp>
+          <stringProp name="BeanShellSampler.filename"></stringProp>
+          <stringProp name="BeanShellSampler.parameters"></stringProp>
+          <boolProp name="BeanShellSampler.resetInterpreter">false</boolProp>
+        </BeanShellSampler>
+        <hashTree/>
+        <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="loopcustomers" enabled="true">
+          <boolProp name="LoopController.continue_forever">true</boolProp>
+          <stringProp name="LoopController.loops">${rowcount}</stringProp>
+        </LoopController>
+        <hashTree>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Functional Create Customer -${tenantid} -${id}" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value"> {&#xd;
+    &quot;tenantid&quot;: &quot;${tenantid}&quot;,&#xd;
+    &quot;id&quot;: &quot;${myid}&quot;,&#xd;
+    &quot;customerid&quot;:&quot;${id}&quot;,&#xd;
+    &quot;managerid&quot;: &quot;${managerid}&quot;,&#xd;
+    &quot;first_name&quot;: &quot;${first_name}&quot;,&#xd;
+    &quot;last_name&quot;: &quot;${last_name}&quot;,&#xd;
+        &quot;jobTitle&quot;: &quot;${jobTitle}&quot;,&#xd;
+    &quot;addressview&quot;: [${addviewstr}]&#xd;
+&#xd;
+   }</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain">localhost</stringProp>
+            <stringProp name="HTTPSampler.port">3000</stringProp>
+            <stringProp name="HTTPSampler.protocol">http</stringProp>
+            <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+            <stringProp name="HTTPSampler.path">/customers</stringProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+            <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+            <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="JSR223 PreProcessor" enabled="true">
+              <stringProp name="scriptLanguage">groovy</stringProp>
+              <stringProp name="parameters"></stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="cacheKey">true</stringProp>
+              <stringProp name="script">import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.UUID;
+
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+String fileName=&quot;TenantCustomerUpload.xlsx&quot;;
+File file =    new File(&quot;C://ZycusAssignment//TenantCustomerUpload.xlsx&quot;);
+FileInputStream inputStream = new FileInputStream(file);
+
+vars.put(&quot;myid&quot;,UUID.randomUUID().toString());
+
+//log.info (&quot; MAIN.....MAIN....&quot;+var.get(&quot;rowcount&quot;));
+
+//int loopcustomer=vars.get(&quot;counter_value&quot;);
+props.get(&quot;rcount&quot;).add(&quot;1&quot;);
+int loopcustomer=props.get(&quot;rcount&quot;).size();
+
+log.info (&quot;Loop counter.....................&quot;+loopcustomer);
+
+Workbook Workbook = null;
+String fileExtensionName = fileName.substring(fileName.indexOf(&quot;.&quot;));
+
+if(fileExtensionName.equals(&quot;.xlsx&quot;)){
+    Workbook = new XSSFWorkbook(inputStream);
+
+    }
+
+    //Check condition if the file is xls file
+
+    else if(fileExtensionName.equals(&quot;.xls&quot;)){
+
+        //If it is xls file then create object of XSSFWorkbook class
+
+        Workbook = new HSSFWorkbook(inputStream);
+
+    }
+
+    //Read sheet inside the workbook by its name
+
+    String sheetName=&quot;customers&quot;;
+
+    Sheet Sheet = Workbook.getSheet(sheetName);
+
+    //Find number of rows in excel file
+
+
+
+    //Create a loop over all the rows of excel file to read it
+
+    
+
+        Row row = Sheet.getRow(loopcustomer);
+
+            String sno = row.getCell(0).getNumericCellValue();
+            String tenantid  = row.getCell(1).getStringCellValue();	
+            String id	 = row.getCell(2).getStringCellValue();
+            String managerid = row.getCell(3).getStringCellValue();
+            String first_name = row.getCell(4).getStringCellValue();
+            String last_name = row.getCell(5).getStringCellValue();
+            String email = row.getCell(6).getStringCellValue();	
+            String addressview = row.getCell(7).getStringCellValue();
+            String jobTitle = row.getCell(8).getStringCellValue();
+
+         vars.put(&quot;sno&quot;,sno.toString());
+         vars.put(&quot;tenantid&quot;,tenantid);
+         vars.put(&quot;id&quot;,id);
+         vars.put(&quot;managerid&quot;,managerid);
+         vars.put(&quot;first_name&quot;,first_name);
+         vars.put(&quot;last_name&quot;,last_name);
+         vars.put(&quot;email&quot;,email);
+         vars.put(&quot;addressview&quot;,addressview);
+         vars.put(&quot;jobTitle&quot;,jobTitle);
+
+             String sheetName2=&quot;addressview&quot;;
+
+    Sheet Sheet2 = Workbook.getSheet(sheetName2);
+   // int rowCount = Sheet2.getLastRowNum()-Sheet2.getFirstRowNum();
+
+   int tenant_addressview=2
+
+	int matchcount=0;
+	int matchrow=0;
+	String addviewstr=&quot;&quot;;
+    for (int i = 1; i &lt;= Sheet2.getLastRowNum(); i++) {
+    Row row2 = Sheet2.getRow(i);
+ String stenantid  = row2.getCell(0).getStringCellValue();	
+ String sid	 = row2.getCell(1).getStringCellValue();
+
+	if (( stenantid == tenantid) &amp;&amp; (sid == id))
+    {
+matchcount =matchcount+1;
+
+String addview  = row2.getCell(2).getNumericCellValue();	
+  String zipCode  = row2.getCell(3).getStringCellValue();
+   String city  = row2.getCell(4).getStringCellValue();
+    String streetName  = row2.getCell(5).getStringCellValue();
+     String streetAddress  = row2.getCell(6).getStringCellValue();
+      String country  = row2.getCell(7).getStringCellValue();
+
+   addviewstr= addviewstr + &quot;{\&quot;addview\&quot;:\&quot;&quot; +addview +&quot;\&quot;,&quot;+&quot;\&quot;zipCode\&quot;:\&quot;&quot; +zipCode +&quot;\&quot;,&quot;+&quot;\&quot;city\&quot;:\&quot;&quot; +city +&quot;\&quot;,&quot;+&quot;\&quot;streetName\&quot;:\&quot;&quot; +streetName +&quot;\&quot;,&quot;+&quot;\&quot;streetAddress\&quot;:\&quot;&quot; +streetAddress +&quot;\&quot;,&quot;+&quot;\&quot;country\&quot;:\&quot;&quot; +country +&quot;\&quot;},&quot;
+    }
+
+     
+   
+   
+        
+    
+    }
+addviewstr=addviewstr.substring(0,addviewstr.length()-1);
+
+      vars.put(&quot;addviewstr&quot;,addviewstr);
+      vars.put(&quot;matchcount&quot;,matchcount.toString());
+
+    
+  
+
+
+    
+
+
+    
+</stringProp>
+            </JSR223PreProcessor>
+            <hashTree/>
+            <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JSR223 Assertion" enabled="true">
+              <stringProp name="cacheKey">true</stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="parameters"></stringProp>
+              <stringProp name="script">import groovy.json.*
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+
+    def jsonSlurper = new JsonSlurper();
+    File file =    new File(&quot;C://ZycusAssignment//db-tenantconfig&quot;+vars.get(&quot;tenantid&quot;)+&quot;.json&quot;);
+FileInputStream inputStream = new FileInputStream(file);
+
+
+    def reader = new BufferedReader(new InputStreamReader(inputStream));
+    data = jsonSlurper.parse(reader);  
+
+  
+if (!( vars.get(&quot;matchcount&quot;) == data.tenantconfig.noviews.toString())) {
+AssertionResult.setFailureMessage(&quot;Config Mismatch with tenant configuration&quot;);
+AssertionResult.setFailure(true);
+}</stringProp>
+              <stringProp name="scriptLanguage">groovy</stringProp>
+            </JSR223Assertion>
+            <hashTree/>
+          </hashTree>
+        </hashTree>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="CustomerUpload Automation Testing -Performance LoadCustomers " enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">25</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">4</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">10</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Performance Create Customer -${tenantid} -${id}" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value"> {&#xd;
+    &quot;tenantid&quot;: &quot;${tenantid}&quot;,&#xd;
+    &quot;id&quot;: &quot;${myid}&quot;,&#xd;
+    &quot;customerid&quot;:&quot;${id}&quot;,&#xd;
+    &quot;managerid&quot;: &quot;${managerid}&quot;,&#xd;
+    &quot;first_name&quot;: &quot;${first_name}&quot;,&#xd;
+    &quot;last_name&quot;: &quot;${last_name}&quot;,&#xd;
+        &quot;jobTitle&quot;: &quot;${jobTitle}&quot;,&#xd;
+    &quot;addressview&quot;: [${addviewstr}]&#xd;
+&#xd;
+   }</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">localhost</stringProp>
+          <stringProp name="HTTPSampler.port">3000</stringProp>
+          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/customers</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="JSR223 PreProcessor" enabled="true">
+            <stringProp name="scriptLanguage">groovy</stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="cacheKey">true</stringProp>
+            <stringProp name="script">import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.UUID;
+
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+String fileName=&quot;TenantCustomerUpload.xlsx&quot;;
+File file =    new File(&quot;C://ZycusAssignment//TenantCustomerUploadPerformance.xlsx&quot;);
+FileInputStream inputStream = new FileInputStream(file);
+
+vars.put(&quot;myid&quot;,UUID.randomUUID().toString());
+
+//log.info (&quot; MAIN.....MAIN....&quot;+var.get(&quot;rowcount&quot;));
+
+//int loopcustomer=vars.get(&quot;counter_value&quot;);
+
+props.get(&quot;rcount1&quot;).add(&quot;1&quot;);
+int loopcustomer=props.get(&quot;rcount1&quot;).size();
+
+log.info (&quot;Loop counter.....................&quot;+loopcustomer);
+
+Workbook Workbook = null;
+String fileExtensionName = fileName.substring(fileName.indexOf(&quot;.&quot;));
+
+if(fileExtensionName.equals(&quot;.xlsx&quot;)){
+    Workbook = new XSSFWorkbook(inputStream);
+
+    }
+
+    //Check condition if the file is xls file
+
+    else if(fileExtensionName.equals(&quot;.xls&quot;)){
+
+        //If it is xls file then create object of XSSFWorkbook class
+
+        Workbook = new HSSFWorkbook(inputStream);
+
+    }
+
+    //Read sheet inside the workbook by its name
+
+    String sheetName=&quot;customers&quot;;
+
+    Sheet Sheet = Workbook.getSheet(sheetName);
+
+    //Find number of rows in excel file
+
+
+
+    //Create a loop over all the rows of excel file to read it
+
+    
+
+        Row row = Sheet.getRow(loopcustomer);
+
+            String sno = row.getCell(0).getNumericCellValue();
+            String tenantid  = row.getCell(1).getStringCellValue();	
+            String id	 = row.getCell(2).getStringCellValue();
+            String managerid = row.getCell(3).getStringCellValue();
+            String first_name = row.getCell(4).getStringCellValue();
+            String last_name = row.getCell(5).getStringCellValue();
+            String email = row.getCell(6).getStringCellValue();	
+            String addressview = row.getCell(7).getStringCellValue();
+            String jobTitle = row.getCell(8).getStringCellValue();
+
+         vars.put(&quot;sno&quot;,sno.toString());
+         vars.put(&quot;tenantid&quot;,tenantid);
+         vars.put(&quot;id&quot;,id);
+         vars.put(&quot;managerid&quot;,managerid);
+         vars.put(&quot;first_name&quot;,first_name);
+         vars.put(&quot;last_name&quot;,last_name);
+         vars.put(&quot;email&quot;,email);
+         vars.put(&quot;addressview&quot;,addressview);
+         vars.put(&quot;jobTitle&quot;,jobTitle);
+
+             String sheetName2=&quot;addressview&quot;;
+
+    Sheet Sheet2 = Workbook.getSheet(sheetName2);
+   // int rowCount = Sheet2.getLastRowNum()-Sheet2.getFirstRowNum();
+
+   int tenant_addressview=2
+
+	int matchcount=0;
+	int matchrow=0;
+	String addviewstr=&quot;&quot;;
+    for (int i = 1; i &lt;= Sheet2.getLastRowNum(); i++) {
+    Row row2 = Sheet2.getRow(i);
+ String stenantid  = row2.getCell(0).getStringCellValue();	
+ String sid	 = row2.getCell(1).getStringCellValue();
+
+	if (( stenantid == tenantid) &amp;&amp; (sid == id))
+    {
+matchcount =matchcount+1;
+
+String addview  = row2.getCell(2).getNumericCellValue();	
+  String zipCode  = row2.getCell(3).getStringCellValue();
+   String city  = row2.getCell(4).getStringCellValue();
+    String streetName  = row2.getCell(5).getStringCellValue();
+     String streetAddress  = row2.getCell(6).getStringCellValue();
+      String country  = row2.getCell(7).getStringCellValue();
+
+   addviewstr= addviewstr + &quot;{\&quot;addview\&quot;:\&quot;&quot; +addview +&quot;\&quot;,&quot;+&quot;\&quot;zipCode\&quot;:\&quot;&quot; +zipCode +&quot;\&quot;,&quot;+&quot;\&quot;city\&quot;:\&quot;&quot; +city +&quot;\&quot;,&quot;+&quot;\&quot;streetName\&quot;:\&quot;&quot; +streetName +&quot;\&quot;,&quot;+&quot;\&quot;streetAddress\&quot;:\&quot;&quot; +streetAddress +&quot;\&quot;,&quot;+&quot;\&quot;country\&quot;:\&quot;&quot; +country +&quot;\&quot;},&quot;
+    }
+
+     
+   
+   
+        
+    
+    }
+addviewstr=addviewstr.substring(0,addviewstr.length()-1);
+
+      vars.put(&quot;addviewstr&quot;,addviewstr);
+      vars.put(&quot;matchcount&quot;,matchcount.toString());
+
+    
+  
+
+
+    
+
+
+    
+</stringProp>
+          </JSR223PreProcessor>
+          <hashTree/>
+          <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JSR223 Assertion" enabled="true">
+            <stringProp name="cacheKey">true</stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="script">import groovy.json.*
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+
+    def jsonSlurper = new JsonSlurper();
+    File file =    new File(&quot;C://ZycusAssignment//db-tenantconfig&quot;+vars.get(&quot;tenantid&quot;)+&quot;.json&quot;);
+FileInputStream inputStream = new FileInputStream(file);
+
+
+    def reader = new BufferedReader(new InputStreamReader(inputStream));
+    data = jsonSlurper.parse(reader);  
+
+  
+if (!( vars.get(&quot;matchcount&quot;) == data.tenantconfig.noviews.toString())) {
+AssertionResult.setFailureMessage(&quot;Config Mismatch with tenant configuration&quot;);
+AssertionResult.setFailure(true);
+}</stringProp>
+            <stringProp name="scriptLanguage">groovy</stringProp>
+          </JSR223Assertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Create Customer -${tenantid} -${id}-Del" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value"> {&#xd;
+    &quot;tenantid&quot;: &quot;${tenantid}&quot;,&#xd;
+    &quot;id&quot;: &quot;${id}&quot;,&#xd;
+    &quot;managerid&quot;: &quot;${managerid}&quot;,&#xd;
+    &quot;first_name&quot;: &quot;${first_name}&quot;,&#xd;
+    &quot;last_name&quot;: &quot;${last_name}&quot;,&#xd;
+        &quot;jobTitle&quot;: &quot;${jobTitle}&quot;,&#xd;
+    &quot;addressview&quot;: [${addviewstr}]&#xd;
+&#xd;
+   }</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">localhost</stringProp>
+          <stringProp name="HTTPSampler.port">3000</stringProp>
+          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/customers</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="JSR223 PreProcessor" enabled="true">
+            <stringProp name="scriptLanguage">groovy</stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="cacheKey">true</stringProp>
+            <stringProp name="script">import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+String fileName=&quot;TenantCustomerUpload.xlsx&quot;;
+File file =    new File(&quot;C://ZycusAssignment//TenantCustomerUpload.xlsx&quot;);
+FileInputStream inputStream = new FileInputStream(file);
+
+//log.info (&quot; MAIN.....MAIN....&quot;+var.get(&quot;rowcount&quot;));
+
+//int loopcustomer=vars.get(&quot;counter_value&quot;);
+props.get(&quot;rcount&quot;).add(&quot;1&quot;);
+int loopcustomer=props.get(&quot;rcount&quot;).size();
+
+log.info (&quot;Loop counter.....................&quot;+loopcustomer);
+
+Workbook Workbook = null;
+String fileExtensionName = fileName.substring(fileName.indexOf(&quot;.&quot;));
+
+if(fileExtensionName.equals(&quot;.xlsx&quot;)){
+    Workbook = new XSSFWorkbook(inputStream);
+
+    }
+
+    //Check condition if the file is xls file
+
+    else if(fileExtensionName.equals(&quot;.xls&quot;)){
+
+        //If it is xls file then create object of XSSFWorkbook class
+
+        Workbook = new HSSFWorkbook(inputStream);
+
+    }
+
+    //Read sheet inside the workbook by its name
+
+    String sheetName=&quot;customers&quot;;
+
+    Sheet Sheet = Workbook.getSheet(sheetName);
+
+    //Find number of rows in excel file
+
+
+
+    //Create a loop over all the rows of excel file to read it
+
+    
+
+        Row row = Sheet.getRow(loopcustomer-1);
+
+            String sno = row.getCell(0).getNumericCellValue();
+            String tenantid  = row.getCell(1).getStringCellValue();	
+            String id	 = row.getCell(2).getStringCellValue();
+            String managerid = row.getCell(3).getStringCellValue();
+            String first_name = row.getCell(4).getStringCellValue();
+            String last_name = row.getCell(5).getStringCellValue();
+            String email = row.getCell(6).getStringCellValue();	
+            String addressview = row.getCell(7).getStringCellValue();
+            String jobTitle = row.getCell(8).getStringCellValue();
+
+         vars.put(&quot;sno&quot;,sno.toString());
+         vars.put(&quot;tenantid&quot;,tenantid);
+         vars.put(&quot;id&quot;,id);
+         vars.put(&quot;managerid&quot;,managerid);
+         vars.put(&quot;first_name&quot;,first_name);
+         vars.put(&quot;last_name&quot;,last_name);
+         vars.put(&quot;email&quot;,email);
+         vars.put(&quot;addressview&quot;,addressview);
+         vars.put(&quot;jobTitle&quot;,jobTitle);
+
+             String sheetName2=&quot;addressview&quot;;
+
+    Sheet Sheet2 = Workbook.getSheet(sheetName2);
+   // int rowCount = Sheet2.getLastRowNum()-Sheet2.getFirstRowNum();
+
+   int tenant_addressview=2
+
+	int matchcount=0;
+	int matchrow=0;
+	String addviewstr=&quot;&quot;;
+    for (int i = 1; i &lt;= Sheet2.getLastRowNum()-1; i++) {
+    Row row2 = Sheet2.getRow(i);
+ String stenantid  = row2.getCell(0).getStringCellValue();	
+ String sid	 = row2.getCell(1).getStringCellValue();
+
+	if (( stenantid == tenantid) &amp;&amp; (sid == id))
+    {
+matchcount =matchcount+1;
+
+String addview  = row2.getCell(2).getNumericCellValue();	
+  String zipCode  = row2.getCell(3).getStringCellValue();
+   String city  = row2.getCell(4).getStringCellValue();
+    String streetName  = row2.getCell(5).getStringCellValue();
+     String streetAddress  = row2.getCell(6).getStringCellValue();
+      String country  = row2.getCell(7).getStringCellValue();
+
+   addviewstr= addviewstr + &quot;{\&quot;addview\&quot;:\&quot;&quot; +addview +&quot;\&quot;,&quot;+&quot;\&quot;zipCode\&quot;:\&quot;&quot; +zipCode +&quot;\&quot;,&quot;+&quot;\&quot;city\&quot;:\&quot;&quot; +city +&quot;\&quot;,&quot;+&quot;\&quot;streetName\&quot;:\&quot;&quot; +streetName +&quot;\&quot;,&quot;+&quot;\&quot;streetAddress\&quot;:\&quot;&quot; +streetAddress +&quot;\&quot;,&quot;+&quot;\&quot;country\&quot;:\&quot;&quot; +country +&quot;\&quot;},&quot;
+    }
+
+     
+   
+   
+        
+    
+    }
+addviewstr=addviewstr.substring(0,addviewstr.length()-1);
+
+      vars.put(&quot;addviewstr&quot;,addviewstr);
+      vars.put(&quot;matchcount&quot;,matchcount.toString());
+
+    
+  
+
+
+    
+
+
+    
+</stringProp>
+          </JSR223PreProcessor>
+          <hashTree/>
+          <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JSR223 Assertion" enabled="true">
+            <stringProp name="cacheKey">true</stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="script">import groovy.json.*
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+
+    def jsonSlurper = new JsonSlurper();
+    File file =    new File(&quot;C://ZycusAssignment//db-tenantconfig&quot;+vars.get(&quot;tenantid&quot;)+&quot;.json&quot;);
+FileInputStream inputStream = new FileInputStream(file);
+
+
+    def reader = new BufferedReader(new InputStreamReader(inputStream));
+    data = jsonSlurper.parse(reader);  
+
+  
+if (!( vars.get(&quot;matchcount&quot;) == data.tenantconfig.noviews.toString())) {
+AssertionResult.setFailureMessage(&quot;Config Mismatch with tenant configuration&quot;);
+AssertionResult.setFailure(true);
+}</stringProp>
+            <stringProp name="scriptLanguage">groovy</stringProp>
+          </JSR223Assertion>
+          <hashTree/>
+        </hashTree>
+      </hashTree>
+      <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+        <collectionProp name="HeaderManager.headers">
+          <elementProp name="" elementType="Header">
+            <stringProp name="Header.name">Content-Type</stringProp>
+            <stringProp name="Header.value">application/json</stringProp>
+          </elementProp>
+        </collectionProp>
+      </HeaderManager>
+      <hashTree/>
+      <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random Variable-Filecounter" enabled="true">
+        <stringProp name="maximumValue">1000</stringProp>
+        <stringProp name="minimumValue">1</stringProp>
+        <stringProp name="outputFormat"></stringProp>
+        <boolProp name="perThread">false</boolProp>
+        <stringProp name="randomSeed"></stringProp>
+        <stringProp name="variableName">Filecounter</stringProp>
+      </RandomVariableConfig>
+      <hashTree/>
+      <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <sentBytes>true</sentBytes>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
+      <ResultCollector guiclass="GraphVisualizer" testclass="ResultCollector" testname="Graph Results" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <sentBytes>true</sentBytes>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
+      <SetupThreadGroup guiclass="SetupThreadGroupGui" testclass="SetupThreadGroup" testname="setUp Thread Group" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </SetupThreadGroup>
+      <hashTree>
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="CustomerUpload Automation Testing - Initial Setup" enabled="true">
+          <stringProp name="cacheKey">true</stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="script">props.put(&quot;rcount&quot;, new ArrayList());
+props.put(&quot;rcount1&quot;, new ArrayList());
+
+</stringProp>
+          <stringProp name="scriptLanguage">groovy</stringProp>
+        </JSR223Sampler>
+        <hashTree/>
+      </hashTree>
+      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <sentBytes>true</sentBytes>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>
