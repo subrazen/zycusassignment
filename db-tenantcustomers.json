@@ -1,0 +1,23 @@
+{
+  "customers": [
+    {
+      "tenantid": "T0001",
+      "id": "C000001",
+      "customerid": "C000001",
+      "managerid": "C00008",
+      "first_name": "Ludie5",
+      "last_name": "Schneider5",
+      "jobTitle": "Regional Branding Architect",
+      "addressview": [
+        {
+          "addview": "1.0",
+          "email": "Renee.Bernier92@yahoo.com",
+          "zipCode": "40029-8380",
+          "city": "Port Amie",
+          "streetName": "Howe Trafficway",
+          "streetAddress": "56411 McKenzie Run",
+          "country": "Moldova"
+        }
+      ]
+    }      ]
+    }
